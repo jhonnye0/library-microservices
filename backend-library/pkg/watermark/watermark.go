@@ -7,7 +7,7 @@ import (
 
 	"github.com/jhonnye0/backend-library/internal"
 
-	"github.com/go-kit/kit/log"
+	"github.com/go-kit/log"
 	"github.com/lithammer/shortuuid/v3"
 )
 

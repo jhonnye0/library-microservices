@@ -12,9 +12,10 @@ import (
 )
 
 const (
-	apiHost   = "localhost:8080"
-	watermark = "localhost:8081"
-	hello     = "localhost:8082"
+	apiHost       = "localhost:8080"
+	watermark     = "localhost:8081"
+	hello         = "localhost:8082"
+	authorization = "localhost:8083"
 )
 
 // Hop-by-hop headers. These are removed when sent to the backend.
@@ -82,7 +83,13 @@ func (p *Proxy) ServeHTTP(wr http.ResponseWriter, req *http.Request) {
 
 			str := strings.SplitN(req.URL.Path[8:], "/", 2)
 			service := str[0]
-			path := "/" + str[1]
+
+			log.Println("Service: ", service)
+
+			path := ""
+			if len(str) > 1 {
+				path = "/" + str[1]
+			}
 
 			if host, ok := p.Servers[service]; ok {
 				req.URL = &url.URL{
@@ -90,6 +97,8 @@ func (p *Proxy) ServeHTTP(wr http.ResponseWriter, req *http.Request) {
 					Host:   host,
 					Path:   path,
 				}
+
+				log.Printf("Proxying to %s", req.URL.String())
 
 				resp, err := client.Do(req)
 				if err != nil {
@@ -120,7 +129,7 @@ func (p *Proxy) ServeHTTP(wr http.ResponseWriter, req *http.Request) {
 }
 
 func main() {
-	servers := map[string]string{"watermark": watermark, "hello": hello}
+	servers := map[string]string{"watermark": watermark, "hello": hello, "auth": authorization}
 
 	var addr = flag.String("addr", "127.0.0.1:8080", "The addr of the application.")
 	flag.Parse()

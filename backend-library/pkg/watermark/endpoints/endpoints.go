@@ -6,7 +6,7 @@ import (
 	"os"
 
 	"github.com/go-kit/kit/endpoint"
-	"github.com/go-kit/kit/log"
+	"github.com/go-kit/log"
 	"github.com/jhonnye0/backend-library/internal"
 	"github.com/jhonnye0/backend-library/pkg/watermark"
 )
