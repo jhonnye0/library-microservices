@@ -1,13 +1,10 @@
-HELLO_IMAGE = api-gateway:latest
+HELLO_IMAGE = api-hello:latest
 
 run/hello:
-	go run hello/main.go
+	go run cmd/hello/main.go
 
-docker/run/hello:
-	docker run -p 8080:8080 $(HELLO_IMAGE)
+run/watermark:
+	go run cmd/watermark/watermark.go
 
-tidy:
-	go mod tidy
-
-build/hello:
-	docker build -t $(HELLO_IMAGE) .
+run/api:
+	go run api/v1/api.go
