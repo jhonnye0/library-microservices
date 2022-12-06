@@ -11,6 +11,7 @@ use app\models\LoginForm;
 use app\models\ContactForm;
 use app\models\Books;
 use yii\data\Pagination;
+use yii\data\ArrayDataProvider;
 
 include '../api/api.php';
 
@@ -156,14 +157,22 @@ class SiteController extends Controller
         }, $response['documents']);
 
         $pagination = new Pagination([
-            'defaultPageSize' => 6,
+            'defaultPageSize' => 9,
             'totalCount' => $books_count
         ]);
 
+        $booksProvider = new ArrayDataProvider([
+            'allModels' => $books,
+            'pagination' => [
+                'pageSize' => 9,
+            ]
+        ]);
+
         // echo '<pre>'; print_r($response['documents']);
+        // echo '<pre>'; print_r($booksProvider->getModels());
 
         return $this->render('library',[
-            'books' => $books,
+            'books' => $booksProvider->getModels(),
             'pagination' => $pagination,
             'response' => $response
         ]);

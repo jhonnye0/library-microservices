@@ -37,4 +37,7 @@ include_once('../simple_html_dom.php');
     </div>
 </ul>
 
-<?= LinkPager::widget(['pagination' => $pagination]); ?>
+<div style='
+  margin: auto;
+  width: 50%;
+  padding: 10px;'><?= LinkPager::widget(['pagination' => $pagination]); ?> </div>
