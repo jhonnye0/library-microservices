@@ -12,6 +12,8 @@ use app\models\ContactForm;
 use app\models\Books;
 use yii\data\Pagination;
 
+include '../api/api.php';
+
 class SiteController extends Controller
 {
     /**
@@ -135,24 +137,35 @@ class SiteController extends Controller
      */
     public function actionLibrary()
     {
-        // $books = Books::find()->orderBy('id')->all();
-        // echo '<pre>'; print_r($books);
+        $response = json_decode(CallAPI('GET', 'localhost:8080/api/v1/watermark/list'), true);
+        $books_count = count($response['documents']);
+        $books = array_map(function ($book){
 
-        $query = Books::find();
+            $book['categories'] = array_reduce($book['categories'], function($result, $category){
+                $result .= $category . ', ';
+                return $result;
+            }, '');
+
+            $book['author'] = array_reduce($book['author'], function ($result, $author){
+                $result .= $author . ', ';
+                return $result;
+            }, '');
+            // print_r($book['author']);
+            // print_r("<br>");
+            return $book;
+        }, $response['documents']);
 
         $pagination = new Pagination([
             'defaultPageSize' => 6,
-            'totalCount' => $query->count()
+            'totalCount' => $books_count
         ]);
 
-        $books = $query->orderBy('title')
-                        ->offset($pagination->offset)
-                        ->limit($pagination->limit)
-                        ->all();
+        // echo '<pre>'; print_r($response['documents']);
 
         return $this->render('library',[
             'books' => $books,
-            'pagination' => $pagination
+            'pagination' => $pagination,
+            'response' => $response
         ]);
     }
 }
