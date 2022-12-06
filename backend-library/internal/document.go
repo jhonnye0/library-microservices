@@ -1,11 +1,19 @@
 package internal
 
 type Document struct {
-	Content   string `json:"content"`
-	Title     string `json:"title"`
-	Author    string `json:"author"`
-	Topic     string `json:"topic"`
-	Watermark string `json:"watermark,omitempty"`
+	ThumbnailUrl     string   `json:"thumbnailUrl"`
+	ShortDescription string   `json:"shortDescription"`
+	LongDescription  string   `json:"longDescription"`
+	Title            string   `json:"title"`
+	Authors          []string `json:"author"`
+	Categories       []string `json:"categories"`
+	Watermark        string   `json:"watermark,omitempty"`
+	ISBN             string   `json:"isbn"`
+	PageCount        int      `json:"pageCount"`
+	PublishedDate    struct {
+		Date string `json:"$date"`
+	} `json:"publishedDate"`
+	Status string `json:"status"`
 }
 
 type Filter struct {
